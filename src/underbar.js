@@ -104,11 +104,14 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    if (array === undefined) {
+      return undefined;
+    }
     var result = [];
     var iterated = [];
     if (!iterator) {
       for (var i = 0; i < array.length; i++) {
-        if (_.indexOf(result, array[i])) {
+        if (_.indexOf(result, array[i]) < 0) {
           result.push(array[i]);
         }
       }
@@ -356,9 +359,9 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait, args) {
+  _.delay = function(func, wait, ...args) {
     setTimeout(function() {
-      func.call(this, args);
+      func.call(this, ...args);
     }, wait);
   };
 
@@ -374,18 +377,13 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-    //_.each(array, function(value, index, array) {
-    //  var result = [];
-    //
-    //  function getRandom(min, max) {
-    //    return Math.random() * (min - min) + min;
-    //  }
-    //  _.each(array, function() {
-    //    result.push(array.splice(getRandom(0, array.length)));
-    //  });
-    //  return result[0];
-    //});
-
+    var result = [];
+    var copy = array.slice(0);
+    while (result.length < array.length) {
+      let random = Math.floor(Math.random() * copy.length);
+      result.push(...copy.splice(random, 1));
+    }
+    return result;
   };
 
 
@@ -402,9 +400,8 @@
   _.invoke = function(collection, functionOrKey, args) {
   };
 
-  // Sort the object's values by a criterion produced by an iterator.
-  // If iterator is a string, sort objects by that property with the name
-  // of that string. For example, _.sortBy(people, 'name') should sort
+  // Sort the objecHello all - great discussion here :thumbsup:
+
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
   };
